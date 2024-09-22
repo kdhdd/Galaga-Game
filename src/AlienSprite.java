@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.Random;
 
 public class AlienSprite extends Sprite{
     private GalagaGame game;
@@ -6,15 +7,16 @@ public class AlienSprite extends Sprite{
     public AlienSprite(GalagaGame game, Image image, int x, int y) {
         super(image, x, y);
         this.game = game;
-        dx = -3;    // 초기에는 왼쪽으로 이동한다.
+        Random random = new Random();
+        dx = random.nextBoolean() ? 5 : -5;
     }
 
     @Override
     public void move() {
-        if (((dx < 0) && (x < 10)) || ((dx > 0) && (x > 800))) {
+        if (((dx < 0) && (x < 10)) || ((dx > 0) && (x > 750))) {
             dx = -dx;
             y += 10;
-            if (y > 600) {
+            if (y > 500) {
                 game.loseLife();
             }
         }

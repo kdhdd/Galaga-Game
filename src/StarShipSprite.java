@@ -22,6 +22,16 @@ public class StarShipSprite extends Sprite{
         if ((dx > 0) && ( x > 800)) {
             return;
         }
+        // dy가 양수일 때는 아래쪽으로 이동
+        // 500px 이상으로 가면 더 이상 아래쪽으로 이동하지 않도록 합니다.
+        if ((dy > 0) && (y > 500)) {
+            return;
+        }
+        // dy가 음수일 때는 위쪽으로 이동
+        // 위쪽 끝을 기준으로 10px를 두고, 그 이하로는 이동하지 않도록 합니다.
+        if ((dy < 0) && (y < 10)) {
+            return;
+        }
         super.move();
     }
 
