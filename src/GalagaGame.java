@@ -20,8 +20,19 @@ public class GalagaGame extends JPanel implements KeyListener {
     private BufferedImage shipImage;
     private BufferedImage backgroundImage;
 
+    private int level = 1;
     private int score = 0;
     private int lives = 3;
+
+    private int initialX = 370;
+    private int initialY = 500;
+
+    public void resetStarshipPosition() {
+        starship.setX(initialX);
+        starship.setY(initialY);
+        starship.setDx(0);  // 움직임 초기화
+        starship.setDy(0);
+    }
 
     public BufferedImage scaleImage(BufferedImage src, int width, int height) {
         BufferedImage scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -50,17 +61,17 @@ public class GalagaGame extends JPanel implements KeyListener {
             e.printStackTrace();
         }
         this.requestFocus();
-        this.initSprites();
+        this.initSprites(initialX, initialY);
         addKeyListener(this);
     }
 
-    private void initSprites() {
-        starship = new StarShipSprite(this, shipImage, 370, 500);
+    private void initSprites(int x, int y) {
+        starship = new StarShipSprite(this, shipImage, x, y);
         sprites.add(starship);
-        for (int y = 0; y < 5; y++) {
-            for (int x = 0; x < 12; x++) {
+        for (int j = 0; j < 5; j++) {
+            for (int i = 0; i < 12; i++) {
                 Sprite alien = new AlienSprite(this, alienImage,
-                        100 + (x * 50), (50) + y * 30);
+                        100 + (i * 50), (50) + j * 30);
                 sprites.add(alien);
             }
         }
@@ -68,7 +79,8 @@ public class GalagaGame extends JPanel implements KeyListener {
 
     private void startGame() {
         sprites.clear();
-        initSprites();
+        initSprites(initialX, initialY);
+        level = 1;
         lives = 3;
         score = 0;
         running = true;
@@ -108,12 +120,7 @@ public class GalagaGame extends JPanel implements KeyListener {
         if (lives <= 0) {
             endGame();
         } else {
-            starship.setX(370);
-            starship.setY(550);
-            starship.setDx(0);
-            starship.setDy(0);
-            sprites.clear();
-            initSprites();
+            resetStarshipPosition();
         }
     }
 
@@ -132,6 +139,7 @@ public class GalagaGame extends JPanel implements KeyListener {
         g.setColor(Color.white);
         g.setFont(new Font("Arial", Font.BOLD, 16));
         g.drawString("Score: " + score, 10, 20);
+        g.drawString("Level: " + level, 10, 45);
         g.drawString("Lives: " + lives, 700, 20);
     }
 
@@ -156,7 +164,9 @@ public class GalagaGame extends JPanel implements KeyListener {
             }
 
             if (!areAliensRemaining()) {
-                endGame();
+                level++;
+                sprites.clear();
+                initSprites(starship.getX(), starship.getY());
             }
 
             repaint();
