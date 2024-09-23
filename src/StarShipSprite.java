@@ -42,5 +42,9 @@ public class StarShipSprite extends Sprite{
             game.removeSprite(other);
             game.loseLife();
         }
+
+        if (other instanceof BossSprite) {
+            game.loseLife();
+        }
     }
 }

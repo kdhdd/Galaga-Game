@@ -18,6 +18,7 @@ public class GalagaGame extends JPanel implements KeyListener {
     private BufferedImage alienImage;
     private BufferedImage shotImage;
     private BufferedImage shipImage;
+    private BufferedImage bossImage;
     private BufferedImage backgroundImage;
 
     private int level = 1;
@@ -45,7 +46,12 @@ public class GalagaGame extends JPanel implements KeyListener {
     public GalagaGame() {
         JFrame frame = new JFrame("Galaga Game");
 
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = kit.getScreenSize();
+
         frame.setSize(800, 600);
+        frame.setLocation((screenSize.width - frame.getWidth() )/ 2,
+                (screenSize.height - frame.getHeight() )  / 2);
         frame.add(this);
         frame.setResizable(false);
         frame.setVisible(true);
@@ -55,7 +61,8 @@ public class GalagaGame extends JPanel implements KeyListener {
             shotImage = scaleImage(ImageIO.read(new File("image/fire.png")), 30, 30);
             shipImage = scaleImage(ImageIO.read(new File("image/starship.png")), 50, 50);
             alienImage = scaleImage(ImageIO.read(new File("image/alien.png")), 50, 50);
-            backgroundImage = scaleImage(ImageIO.read(new File("image/bg.png")), 800, 600);
+            bossImage = scaleImage(ImageIO.read(new File("image/boss.png")), 300, 300);
+            backgroundImage = scaleImage(ImageIO.read(new File("image/preview.png")), 800, 600);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,11 +75,13 @@ public class GalagaGame extends JPanel implements KeyListener {
     private void initSprites(int x, int y) {
         starship = new StarShipSprite(this, shipImage, x, y);
         sprites.add(starship);
-        for (int j = 0; j < 5; j++) {
-            for (int i = 0; i < 12; i++) {
-                Sprite alien = new AlienSprite(this, alienImage,
-                        100 + (i * 50), (50) + j * 30);
-                sprites.add(alien);
+        if (!isBossPresent()) {
+            for (int j = 0; j < 5; j++) {
+                for (int i = 0; i < 12; i++) {
+                    Sprite alien = new AlienSprite(this, alienImage,
+                            100 + (i * 50), (50) + j * 30);
+                    sprites.add(alien);
+                }
             }
         }
     }
@@ -124,6 +133,20 @@ public class GalagaGame extends JPanel implements KeyListener {
         }
     }
 
+    public boolean isBossPresent() {
+        for (Sprite sprite : sprites) {
+            if (sprite instanceof BossSprite) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void boss() {
+        Sprite boss = new BossSprite(this, bossImage, 235, 20);
+        sprites.add(boss);
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -163,9 +186,15 @@ public class GalagaGame extends JPanel implements KeyListener {
                 }
             }
 
-            if (!areAliensRemaining()) {
+            if (!areAliensRemaining() && !isBossPresent()) {
                 level++;
                 sprites.clear();
+                initSprites(starship.getX(), starship.getY());
+            }
+
+            if (score >= 100 && !isBossPresent()) {
+                sprites.clear();
+                boss();
                 initSprites(starship.getX(), starship.getY());
             }
 
