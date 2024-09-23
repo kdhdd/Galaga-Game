@@ -2,6 +2,7 @@
 
 ![js](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 ![js](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+
 1차 개발
 1. Alien 랜덤 움직임 구현
 
