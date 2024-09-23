@@ -25,5 +25,9 @@ public class ShotSprite extends Sprite{
             game.removeSprite(other);
             game.increaseScore(); // 점수 추가
         }
+
+        if (other instanceof BossSprite) {
+            game.removeSprite(this);
+        }
     }
 }
