@@ -9,6 +9,12 @@ public class BossSprite extends Sprite{
         this.game = game;
         this.health = 100;
     }
+    @Override
+    public void move() {
+        if (Math.random() < 0.05) {
+            fireAtPlayer();
+        }
+    }
 
     @Override
     public void handleCollision(Sprite other) {
@@ -22,5 +28,11 @@ public class BossSprite extends Sprite{
                 game.endGame();
             }
         }
+    }
+
+    public void fireAtPlayer() {
+        Sprite bossShot = new ShotSprite(game, game.getBossShotImage(), this.getX() + 140, this.getY() + 300);
+        bossShot.setDy(3);
+        game.addSprite(bossShot);
     }
 }
