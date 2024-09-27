@@ -17,6 +17,7 @@ public class GalagaGame extends JPanel implements KeyListener {
 
     private BufferedImage alienImage;
     private BufferedImage shotImage;
+    private BufferedImage bossShotImage;
     private BufferedImage shipImage;
     private BufferedImage bossImage;
     private BufferedImage backgroundImage;
@@ -33,6 +34,14 @@ public class GalagaGame extends JPanel implements KeyListener {
         starship.setY(initialY);
         starship.setDx(0);  // 움직임 초기화
         starship.setDy(0);
+    }
+
+    public BufferedImage getBossShotImage() {
+        return bossShotImage;
+    }
+
+    public void addSprite(Sprite sprite) {
+        sprites.add(sprite);
     }
 
     public BufferedImage scaleImage(BufferedImage src, int width, int height) {
@@ -59,6 +68,7 @@ public class GalagaGame extends JPanel implements KeyListener {
 
         try {
             shotImage = scaleImage(ImageIO.read(new File("image/fire.png")), 30, 30);
+            bossShotImage = scaleImage(ImageIO.read(new File("image/bossShot.png")), 50, 50);
             shipImage = scaleImage(ImageIO.read(new File("image/starship.png")), 50, 50);
             alienImage = scaleImage(ImageIO.read(new File("image/alien.png")), 50, 50);
             bossImage = scaleImage(ImageIO.read(new File("image/boss.png")), 300, 300);
@@ -206,6 +216,8 @@ public class GalagaGame extends JPanel implements KeyListener {
         }
     }
 
+    private boolean isFiring = false;
+
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_LEFT)
@@ -216,8 +228,10 @@ public class GalagaGame extends JPanel implements KeyListener {
             starship.setDy(-3);
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
             starship.setDy(+3);
-        if (e.getKeyCode() == KeyEvent.VK_SPACE)
+        if (e.getKeyCode() == KeyEvent.VK_SPACE && !isFiring) {
             fire();
+            isFiring = true;
+        }
     }
 
     @Override
@@ -230,6 +244,9 @@ public class GalagaGame extends JPanel implements KeyListener {
             starship.setDy(0);
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
             starship.setDy(0);
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            isFiring = false;
+        }
     }
 
     @Override
