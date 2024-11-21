@@ -38,7 +38,7 @@ public class StarShipSprite extends Sprite{
     @Override
     public void handleCollision(Sprite other) {
         // 충돌한 객체가 만약 외계인 우주선이면 게임을 종료합니다.
-        if (other instanceof AlienSprite) {
+        if (other instanceof Enemy0Sprite) {
             game.removeSprite(other);
             game.loseLife();
         }

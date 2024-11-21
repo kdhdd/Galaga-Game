@@ -6,7 +6,7 @@ public class ShotSprite extends Sprite{
     public ShotSprite(GalagaGame game, Image image, int x, int y) {
         super(image, x, y);
         this.game = game;
-        dy = -3;
+        dy = -8;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class ShotSprite extends Sprite{
 
     @Override
     public void handleCollision(Sprite other) {
-        if (other instanceof AlienSprite) {
+        if (other instanceof Enemy0Sprite) {
             game.removeSprite(this);
             game.removeSprite(other);
             game.increaseScore(); // 점수 추가
