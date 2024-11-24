@@ -14,6 +14,10 @@ public class Sprite {
         this.y = y;
     }
 
+    public Image getImage() {
+        return image;
+    }
+
     // 스프라이트의 가로 길이를 반환한다.
     public int getWidth() {
         return image.getWidth(null);
