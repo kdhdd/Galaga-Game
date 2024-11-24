@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.util.Random;
 
 public class Enemy0Sprite extends Sprite{
     private GalagaGame game;
@@ -7,9 +6,7 @@ public class Enemy0Sprite extends Sprite{
     public Enemy0Sprite(GalagaGame game, Image image, int x, int y) {
         super(image, x, y);
         this.game = game;
-        Random random = new Random();
-        //dx = random.nextBoolean() ? 5 : -5;
-        dx = (x < 400) ? 2 : -2;
+        //dx = (x < 400) ? 2 : -2;
 
         dy = 3;
     }
@@ -32,4 +29,13 @@ public class Enemy0Sprite extends Sprite{
 
         super.move();
     }
+
+    public void pattern1() {
+        dx = 2;
+    }
+
+    public void pattern2() {
+        dx = -2;
+    }
+
 }

@@ -22,7 +22,7 @@ public class ShotSprite extends Sprite{
 
     @Override
     public void handleCollision(Sprite other) {
-        if (other instanceof Enemy0Sprite) {
+        if (other instanceof Enemy0Sprite || other instanceof Enemy1Sprite) {
             game.removeSprite(this);
             game.removeSprite(other);
             game.increaseScore(); // 점수 추가
