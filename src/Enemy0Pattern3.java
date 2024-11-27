@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
-public class Enemy1Sprite extends Sprite {
+public class Enemy0Pattern3 extends Sprite {
     private GalagaGame game;
 
     private double angle; // 각도 (라디안)
@@ -12,7 +12,7 @@ public class Enemy1Sprite extends Sprite {
     private int radius = 70; // 원 반지름
     private double rotationAngle; // 이미지 회전 각도
 
-    public Enemy1Sprite(GalagaGame game, Image image, int x, int y) {
+    public Enemy0Pattern3(GalagaGame game, Image image, int x, int y) {
         super(image, x, y);
         this.game = game;
 
