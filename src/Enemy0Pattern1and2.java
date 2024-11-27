@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Enemy0Pattern1and2 extends Sprite{
     private GalagaGame game;

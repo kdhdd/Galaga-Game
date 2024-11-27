@@ -14,6 +14,10 @@ public class Sprite {
         this.y = y;
     }
 
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
     public Image getImage() {
         return image;
     }
@@ -88,6 +92,11 @@ public class Sprite {
 
     // 충돌을 처리한다.
     public void handleCollision(Sprite other) {
+
+    }
+
+    // 충돌 모션
+    public void collisionMotion() {
 
     }
 }
