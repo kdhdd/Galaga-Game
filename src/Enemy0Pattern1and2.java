@@ -1,9 +1,9 @@
 import java.awt.*;
 
-public class Enemy0Sprite extends Sprite{
+public class Enemy0Pattern1and2 extends Sprite{
     private GalagaGame game;
 
-    public Enemy0Sprite(GalagaGame game, Image image, int x, int y) {
+    public Enemy0Pattern1and2(GalagaGame game, Image image, int x, int y) {
         super(image, x, y);
         this.game = game;
         //dx = (x < 400) ? 2 : -2;

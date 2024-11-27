@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class GalagaGame extends JPanel implements KeyListener {
 
@@ -18,7 +17,13 @@ public class GalagaGame extends JPanel implements KeyListener {
     private ArrayList<Sprite> sprites = new ArrayList<>();
     private Sprite starship;
 
-    private BufferedImage enemy0Image;
+    private BufferedImage smallEnemy0Image;
+    private BufferedImage smallEnemy1Image;
+    private BufferedImage smallEnemy2Image;
+
+    private BufferedImage midEnemy0Image;
+    private BufferedImage midEnemy0WarningImage;
+
     private BufferedImage shotImage;
     private BufferedImage bossShotImage;
     private BufferedImage shipImage;
@@ -31,9 +36,8 @@ public class GalagaGame extends JPanel implements KeyListener {
 
     private Timer t;
     private Timer restartTimer;
-    private Timer pattern1;
-    private Timer pattern2;
-    private Timer pattern3;
+    private Timer pattern1, pattern2, pattern3, pattern4, pattern5, pattern6;
+    private Timer midPattern1;
 
     private int initialX = 370;
     private int initialY = 500;
@@ -78,8 +82,15 @@ public class GalagaGame extends JPanel implements KeyListener {
         try {
             shotImage = scaleImage(ImageIO.read(new File("image/fire.png")), 30, 30);
             bossShotImage = scaleImage(ImageIO.read(new File("image/bossShot.png")), 50, 50);
-            shipImage = scaleImage(ImageIO.read(new File("image/starship.png")), 50, 50);
-            enemy0Image = scaleImage(ImageIO.read(new File("image/enemy0.png")), 50, 50);
+            shipImage = scaleImage(ImageIO.read(new File("image/player.png")), 50, 50);
+
+            smallEnemy0Image = scaleImage(ImageIO.read(new File("image/smallEnemy0.png")), 30, 30);
+            smallEnemy1Image = scaleImage(ImageIO.read(new File("image/smallEnemy1.png")), 30, 30);
+            smallEnemy2Image = scaleImage(ImageIO.read(new File("image/smallEnemy2.png")), 28, 27);
+
+            midEnemy0Image = scaleImage(ImageIO.read(new File("image/midEnemy0.png")), 70, 60);
+            midEnemy0WarningImage = scaleImage(ImageIO.read(new File("image/midEnemy0Warning.png")), 70, 60);
+
             bossImage = scaleImage(ImageIO.read(new File("image/boss.png")), 300, 300);
             backgroundImage = scaleImage(ImageIO.read(new File("image/background.png")), 800, 600);
 
@@ -97,7 +108,7 @@ public class GalagaGame extends JPanel implements KeyListener {
 /*        if (!isBossPresent()) {
             for (int j = 0; j < 1; j++) {
                 for (int i = 0; i < 2; i++) {
-                    Sprite alien = new Enemy0Sprite(this, enemy0Image,
+                    Sprite alien = new Enemy0Pattern1and2(this, enemy0Image,
                             100 + (i * 550), 10);
                     sprites.add(alien);
                 }
@@ -117,7 +128,7 @@ public class GalagaGame extends JPanel implements KeyListener {
 /*    private void generateEnemy() {
         if (spawnTick < System.currentTimeMillis()) {
             spawnTick = System.currentTimeMillis() + new Random().nextInt(2000) + 500;
-            sprites.add(new Enemy0Sprite(this, enemy0Image, new Random().nextInt(750) + 50, 10));
+            sprites.add(new Enemy0Pattern1and2(this, enemy0Image, new Random().nextInt(750) + 50, 10));
         }
     }*/
 
@@ -142,7 +153,7 @@ public class GalagaGame extends JPanel implements KeyListener {
 
     public boolean areEnemy0Remaining() {
         for (Sprite sprite : sprites) {
-            if (sprite instanceof Enemy0Sprite) {
+            if (sprite instanceof Enemy0Pattern1and2) {
                 return true;
             }
         }
@@ -286,33 +297,52 @@ public class GalagaGame extends JPanel implements KeyListener {
         });
         t.start();
 
-/*        restartTimer = new Timer(1000, new ActionListener() {
+        restartTimer = new Timer(1000, new ActionListener() {
             int elapsedSeconds = 0;
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 elapsedSeconds++;
 
-                if (elapsedSeconds % 6 == 0)    // 7초마다 시작, 0.4초 간격으로 3번 실행
+                if (elapsedSeconds % 23 == 0)
                     pattern1.start();
 
-                if (elapsedSeconds % 8 == 0)    // 10초마다 시작, 0.4초 간격으로 3번 실행
+                if (elapsedSeconds % 25 == 0)
                     pattern2.start();
 
-                if (elapsedSeconds % 15 == 0)    // 10초마다 시작, 0.6초 간격으로 1번 실행
-                    pattern3.start();
+                if (elapsedSeconds % 17 == 0)
+                    pattern5.start();
+
+                if (elapsedSeconds % 40 == 0)
+                    midPattern1.start();
+
+/*
+                if (elapsedSeconds % 5 == 0)
+                    pattern1.start();
+
+                if (elapsedSeconds % 5 == 0)
+                    pattern2.start();
+
+                if (elapsedSeconds % 7 == 0)
+                    pattern5.start();
+
+                if (elapsedSeconds % 5 == 0)
+                    midPattern1.start();
+*/
+
             }
         });
-        restartTimer.start();*/
+        restartTimer.start();
 
-        pattern1 = new Timer(400, new ActionListener() {
+        pattern1 = new Timer(600, new ActionListener() {
             int num = 0;
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Enemy0Sprite enemy = new Enemy0Sprite(GalagaGame.this, enemy0Image, 50, 10);
+                Enemy0Pattern1and2 enemy = new Enemy0Pattern1and2(GalagaGame.this, smallEnemy0Image, 50, 10);
                 enemy.pattern1();
                 sprites.add(enemy);
+
                 num++;
 
                 if (num >= 3) {
@@ -323,12 +353,12 @@ public class GalagaGame extends JPanel implements KeyListener {
             }
         });
 
-        pattern2 = new Timer(400, new ActionListener() {
+        pattern2 = new Timer(600, new ActionListener() {
             int num = 0;
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Enemy0Sprite enemy = new Enemy0Sprite(GalagaGame.this, enemy0Image, 750, 10);
+                Enemy0Pattern1and2 enemy = new Enemy0Pattern1and2(GalagaGame.this, smallEnemy0Image, 750, 10);
                 enemy.pattern2();
                 sprites.add(enemy);
 
@@ -342,22 +372,65 @@ public class GalagaGame extends JPanel implements KeyListener {
         });
 
         pattern3 = new Timer(400, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Enemy0Pattern3 enemy = new Enemy0Pattern3(GalagaGame.this, smallEnemy1Image, 200, 10);
+                sprites.add(enemy);
+
+                pattern3.stop();
+            }
+        });
+
+        pattern4 = new Timer(400, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Enemy0Pattern4 enemy = new Enemy0Pattern4(GalagaGame.this, smallEnemy1Image, 530, 10);
+                sprites.add(enemy);
+
+                pattern4.stop();
+            }
+        });
+        pattern4.start();
+
+        pattern5 = new Timer(200, new ActionListener() {
             int num = 0;
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Enemy1Sprite enemy = new Enemy1Sprite(GalagaGame.this, enemy0Image, 300, 10);
+                Enemy0Pattern5 enemy = new Enemy0Pattern5(GalagaGame.this, smallEnemy2Image, 0, 150);
                 sprites.add(enemy);
 
                 num++;
 
                 if (num >= 5) {
-                    pattern3.stop();
+                    pattern5.stop();
                     num = 0;
                 }
             }
         });
-        pattern3.start();
+
+        pattern6 = new Timer(400, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Enemy0Pattern6 enemy = new Enemy0Pattern6(GalagaGame.this, smallEnemy1Image, 800, 150);
+                sprites.add(enemy);
+
+                pattern6.stop();
+            }
+        });
+
+        midPattern1 = new Timer(400, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MidEnemyPattern0 enemy = new MidEnemyPattern0(GalagaGame.this, midEnemy0Image, midEnemy0WarningImage, 200, 10);
+                sprites.add(enemy);
+
+                midPattern1.stop();
+            }
+        });
     }
 
     public static void main(String[] args) {

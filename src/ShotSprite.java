@@ -22,13 +22,14 @@ public class ShotSprite extends Sprite{
 
     @Override
     public void handleCollision(Sprite other) {
-        if (other instanceof Enemy0Sprite || other instanceof Enemy1Sprite) {
+        if (other instanceof Enemy0Pattern1and2 || other instanceof Enemy0Pattern3 ||
+        other instanceof Enemy0Pattern4 || other instanceof Enemy0Pattern5) {
             game.removeSprite(this);
             game.removeSprite(other);
             game.increaseScore(); // 점수 추가
         }
 
-        if (other instanceof BossSprite) {
+        if (other instanceof BossSprite || other instanceof MidEnemyPattern0) {
             game.removeSprite(this);
         }
 
