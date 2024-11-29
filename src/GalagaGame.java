@@ -33,6 +33,8 @@ public class GalagaGame extends JPanel implements KeyListener {
     private BufferedImage shotImage;
     private BufferedImage bossShotImage;
     private BufferedImage shipImage;
+    private BufferedImage playerInvincibleImage;
+
     private BufferedImage bossImage;
     private BufferedImage backgroundImage;
 
@@ -77,6 +79,7 @@ public class GalagaGame extends JPanel implements KeyListener {
             shotImage = scaleImage(ImageIO.read(new File("image/fire.png")), 30, 30);
             bossShotImage = scaleImage(ImageIO.read(new File("image/bossShot.png")), 50, 50);
             shipImage = scaleImage(ImageIO.read(new File("image/player.png")), 50, 50);
+            playerInvincibleImage = scaleImage(ImageIO.read(new File("image/playerInvincible.png")), 50, 50);
 
             smallEnemy0Image = scaleImage(ImageIO.read(new File("image/smallEnemy0.png")), 30, 30);
             smallEnemy1Image = scaleImage(ImageIO.read(new File("image/smallEnemy1.png")), 30, 30);
@@ -156,7 +159,7 @@ public class GalagaGame extends JPanel implements KeyListener {
     }
 
     private void initSprites(int x, int y) {
-        starship = new StarShipSprite(this, images, shipImage, x, y);
+        starship = new StarShipSprite(this, images, shipImage, playerInvincibleImage, x, y);
         sprites.add(starship);
 /*        if (!isBossPresent()) {
             for (int j = 0; j < 1; j++) {
@@ -342,7 +345,7 @@ public class GalagaGame extends JPanel implements KeyListener {
                 if (elapsedSeconds % 5 == 0)
                     pattern1.start();
 
-                /*
+
                 if (elapsedSeconds % 5 == 0)
                     pattern2.start();
 
@@ -352,7 +355,6 @@ public class GalagaGame extends JPanel implements KeyListener {
                 if (elapsedSeconds % 5 == 0)
                     midPattern1.start();
 
-                 */
 
             }
         });
