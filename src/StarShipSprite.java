@@ -6,17 +6,21 @@ import java.util.ArrayList;
 
 public class StarShipSprite extends Sprite{
     private GalagaGame game;
-    private Image image, fireball0, fireball1, fireball2, fireball3, fireball4, fireball5, fireball6, tmp;
-    private Timer timer, resetTimer, invincibilityTimer;
+    private Image image, playerInvincibleImage, fireball0, fireball1, fireball2, fireball3, fireball4, fireball5, fireball6, tmp;
+    private Timer timer, resetTimer, invincibilityTimer, imageTimer;
 
     private boolean isInCollision = false;
     private boolean isInvincible = false; // 무적 상태 여부
+    private boolean invincibleState = false;
     private static final int INVINCIBLE_DURATION = 1000; // 무적 지속 시간 (ms)
 
-    public StarShipSprite(GalagaGame game, ArrayList<Image> images, Image image , int x, int y) {
+    private int n = 0;
+
+    public StarShipSprite(GalagaGame game, ArrayList<Image> images, Image image, Image playerInvincibleImage, int x, int y) {
         super(image, x, y);
         this.game = game;
         this.image = image;
+        this.playerInvincibleImage = playerInvincibleImage;
         fireball0 = images.get(0);
         fireball1 = images.get(1);
         fireball2 = images.get(2);
@@ -61,13 +65,42 @@ public class StarShipSprite extends Sprite{
             return; // 이미 충돌 중이라면 실행하지 않음
         }
 
+        imageTimer = new Timer(200, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (isInCollision) {
+                    invincibleState = !invincibleState;
+                }
+            }
+        });
+        imageTimer.start();
+
         isInCollision = true;
         game.setStarshipIsCollision(true);
 
         setDx(0);
         setDy(0);
 
-        timer = new Timer(100, new ActionListener() { // 100ms마다 실행
+        timer = new Timer(100, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                n++;
+
+                if (n == 1) {
+                    startInvincibilityTimer();
+                } else if (n == 8) {
+                    startResetTimer(game);
+                } else if (n > 30) {
+                    n = 0;
+                    isInCollision = false;
+                    invincibleState = false;
+                    timer.stop();
+                }
+            }
+        });
+        timer.start();
+
+/*        timer = new Timer(100, new ActionListener() { // 100ms마다 실행
             int num = 0;
 
             @Override
@@ -107,7 +140,44 @@ public class StarShipSprite extends Sprite{
                 num++;
             }
         });
-        timer.start(); // 타이머 시작
+        timer.start(); // 타이머 시작*/
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        switch (n) {
+            case 0:
+                g.drawImage(image, x, y, null);
+                break;
+            case 1:
+                g.drawImage(fireball0, x, y, null);
+                break;
+            case 2:
+                g.drawImage(fireball1, x, y, null);
+                break;
+            case 3:
+                g.drawImage(fireball2, x, y, null);
+                break;
+            case 4:
+                g.drawImage(fireball3, x, y, null);
+                break;
+            case 5:
+                g.drawImage(fireball4, x, y, null);
+                break;
+            case 6:
+                g.drawImage(fireball5, x, y, null);
+                break;
+            case 7:
+                g.drawImage(fireball6, x, y, null);
+                break;
+            default:
+                if (isInCollision && invincibleState) {
+                    g.drawImage(playerInvincibleImage, x, y, null);
+                } else {
+                    g.drawImage(image, x, y, null);
+                }
+                break;
+        }
     }
 
     public void startResetTimer(GalagaGame game) {
@@ -129,17 +199,18 @@ public class StarShipSprite extends Sprite{
     private void startInvincibilityTimer() {
         isInvincible = true;
 
-        invincibilityTimer = new Timer(INVINCIBLE_DURATION, new ActionListener() {
+        invincibilityTimer = new Timer(100, new ActionListener() {
             int num = 0;
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 num++;
 
-                if (num >= 3) {
+                if (num > 31) {
 
                     isInvincible = false; // 무적 상태 해제
                     invincibilityTimer.stop();
+                    imageTimer.stop();
                 }
             }
         });
