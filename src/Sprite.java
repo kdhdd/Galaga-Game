@@ -7,11 +7,21 @@ public class Sprite {
     protected int dy;       // 단위시간에 움직이는 y방향 거리
     private Image image;    // 스프라이트가 가지고 있는 이미지
 
+    private boolean isIncollision;
+
     // 생성자
     public Sprite(Image image, int x, int y) {
         this.image = image;
         this.x = x;
         this.y = y;
+    }
+
+    public void setIsIncollision(boolean isIncollision) {
+        this.isIncollision = isIncollision;
+    }
+
+    public boolean getIsIncollision() {
+        return isIncollision;
     }
 
     public void setImage(Image image) {
