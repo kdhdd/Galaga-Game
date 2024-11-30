@@ -1,12 +1,17 @@
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ShotSprite extends Sprite{
     private GalagaGame game;
 
+    private Timer removeEnemyTimer;
+
     public ShotSprite(GalagaGame game, Image image, int x, int y) {
         super(image, x, y);
         this.game = game;
-        dy = -8;
+        dy = -10;
     }
 
     @Override
@@ -23,10 +28,26 @@ public class ShotSprite extends Sprite{
     @Override
     public void handleCollision(Sprite other) {
         if (other instanceof Enemy0Pattern1and2 || other instanceof Enemy0Pattern3 ||
-                other instanceof Enemy0Pattern4 || other instanceof Enemy0Pattern5) {
-            game.removeSprite(this);
-            game.removeSprite(other);
-            game.increaseScore(); // 점수 추가
+                other instanceof Enemy0Pattern4 || other instanceof Enemy0Pattern5 || other instanceof Enemy0Pattern6) {
+            if (!other.getIsIncollision()) {
+                other.collisionMotion();
+                removeEnemyTimer = new Timer(100, new ActionListener() {
+                    int removeEnemyNum = 0;
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        removeEnemyNum++;
+
+                        if (removeEnemyNum == 7) {
+                            game.removeSprite(other);
+                            removeEnemyTimer.stop();
+                        }
+                    }
+                });
+                removeEnemyTimer.start();
+                game.increaseScore(); // 점수 추가
+                game.removeSprite(this);
+            }
         }
 
         if (other instanceof BossSprite || other instanceof MidEnemyPattern0) {

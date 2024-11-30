@@ -15,6 +15,7 @@ public class GalagaGame extends JPanel implements KeyListener {
     // 불리안 변수
     private boolean running = true;                 // 게임루프를 위한 변수. 게임이 종료되면 false
     private boolean starshipIsCollision = false;    // 플레이어가 폭발하는 동안 움직임을 막기 위한 변수
+    private boolean isFiring = false;
 
     private ArrayList<Sprite> sprites = new ArrayList<>();  // 플레이어, 적, 총알, 보스를 담는 배열리스트
     private Sprite starship;                                // 플레이어 객체
@@ -30,6 +31,9 @@ public class GalagaGame extends JPanel implements KeyListener {
     private BufferedImage fireball0, fireball1, fireball2, fireball3, fireball4, fireball5, fireball6;
     private BufferedImage[] fireballs = new BufferedImage[7];
 
+    private BufferedImage explosion0, explosion1, explosion2, explosion3, explosion4, explosion5, explosion6;
+    private BufferedImage[] explosions = new BufferedImage[7];
+
     private BufferedImage shotImage;
     private BufferedImage bossShotImage;
     private BufferedImage shipImage;
@@ -38,7 +42,8 @@ public class GalagaGame extends JPanel implements KeyListener {
     private BufferedImage bossImage;
     private BufferedImage backgroundImage;
 
-    private ArrayList<Image> images = new ArrayList<>();
+    private ArrayList<Image> fireballImages = new ArrayList<>();
+    private ArrayList<Image> explosionImages = new ArrayList<>();
 
     // 타이머 변수
     private Timer t;                // 게임루프(Sprite 움직임, 충돌, repaint())을 위한 타이머
@@ -93,6 +98,14 @@ public class GalagaGame extends JPanel implements KeyListener {
             fireball5 = scaleImage(ImageIO.read(new File("image/fireball5.png")), 53, 53);
             fireball6 = scaleImage(ImageIO.read(new File("image/fireball6.png")), 50, 50);
 
+            explosion0 = scaleImage(ImageIO.read(new File("image/explosion0.png")), 30, 30);
+            explosion1 = scaleImage(ImageIO.read(new File("image/explosion1.png")), 32, 32);
+            explosion2 = scaleImage(ImageIO.read(new File("image/explosion2.png")), 34, 34);
+            explosion3 = scaleImage(ImageIO.read(new File("image/explosion3.png")), 36, 36);
+            explosion4 = scaleImage(ImageIO.read(new File("image/explosion4.png")), 34, 34);
+            explosion5 = scaleImage(ImageIO.read(new File("image/explosion5.png")), 32, 32);
+            explosion6 = scaleImage(ImageIO.read(new File("image/explosion6.png")), 30, 30);
+
             midEnemy0Image = scaleImage(ImageIO.read(new File("image/midEnemy0.png")), 70, 60);
             midEnemy0WarningImage = scaleImage(ImageIO.read(new File("image/midEnemy0Warning.png")), 70, 60);
 
@@ -112,8 +125,21 @@ public class GalagaGame extends JPanel implements KeyListener {
         fireballs[5] = fireball5;
         fireballs[6] = fireball6;
 
+        // explosions 배열에 넣기
+        explosions[0] = explosion0;
+        explosions[1] = explosion1;
+        explosions[2] = explosion2;
+        explosions[3] = explosion3;
+        explosions[4] = explosion4;
+        explosions[5] = explosion5;
+        explosions[6] = explosion6;
+
         for (BufferedImage fireball : fireballs) {
-            images.add(fireball);
+            fireballImages.add(fireball);
+        }
+
+        for (BufferedImage explosion : explosions) {
+            explosionImages.add(explosion);
         }
 
         this.requestFocus();
@@ -159,7 +185,7 @@ public class GalagaGame extends JPanel implements KeyListener {
     }
 
     private void initSprites(int x, int y) {
-        starship = new StarShipSprite(this, images, shipImage, playerInvincibleImage, x, y);
+        starship = new StarShipSprite(this, fireballImages, shipImage, playerInvincibleImage, x, y);
         sprites.add(starship);
 /*        if (!isBossPresent()) {
             for (int j = 0; j < 1; j++) {
@@ -273,8 +299,6 @@ public class GalagaGame extends JPanel implements KeyListener {
         }
     }
 
-    private boolean isFiring = false;
-
     // 3번째 방법 MyFrame 클래스가 이벤트를 처리
     @Override
     public void keyPressed(KeyEvent e) {
@@ -346,14 +370,14 @@ public class GalagaGame extends JPanel implements KeyListener {
                     pattern1.start();
 
 
-                if (elapsedSeconds % 5 == 0)
-                    pattern2.start();
+/*                if (elapsedSeconds % 5 == 0)
+                    pattern2.start();*/
 
                 if (elapsedSeconds % 7 == 0)
                     pattern5.start();
 
-                if (elapsedSeconds % 5 == 0)
-                    midPattern1.start();
+/*                if (elapsedSeconds % 5 == 0)
+                    midPattern1.start();*/
 
 
             }
@@ -365,7 +389,7 @@ public class GalagaGame extends JPanel implements KeyListener {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Enemy0Pattern1and2 enemy = new Enemy0Pattern1and2(GalagaGame.this, smallEnemy0Image, 50, 10);
+                Enemy0Pattern1and2 enemy = new Enemy0Pattern1and2(GalagaGame.this, explosionImages, smallEnemy0Image, 50, 10);
                 enemy.pattern1();
                 sprites.add(enemy);
 
@@ -378,14 +402,13 @@ public class GalagaGame extends JPanel implements KeyListener {
 
             }
         });
-        pattern1.start();
 
         pattern2 = new Timer(600, new ActionListener() {
             int num = 0;
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Enemy0Pattern1and2 enemy = new Enemy0Pattern1and2(GalagaGame.this, smallEnemy0Image, 750, 10);
+                Enemy0Pattern1and2 enemy = new Enemy0Pattern1and2(GalagaGame.this, explosionImages, smallEnemy0Image, 750, 10);
                 enemy.pattern2();
                 sprites.add(enemy);
 
@@ -402,7 +425,7 @@ public class GalagaGame extends JPanel implements KeyListener {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Enemy0Pattern3 enemy = new Enemy0Pattern3(GalagaGame.this, smallEnemy1Image, 200, 10);
+                Enemy0Pattern3 enemy = new Enemy0Pattern3(GalagaGame.this, explosionImages, smallEnemy1Image, 200, 10);
                 sprites.add(enemy);
 
                 pattern3.stop();
@@ -413,20 +436,19 @@ public class GalagaGame extends JPanel implements KeyListener {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Enemy0Pattern4 enemy = new Enemy0Pattern4(GalagaGame.this, smallEnemy1Image, 530, 10);
+                Enemy0Pattern4 enemy = new Enemy0Pattern4(GalagaGame.this, explosionImages, smallEnemy1Image, 530, 10);
                 sprites.add(enemy);
 
                 pattern4.stop();
             }
         });
-        pattern4.start();
 
         pattern5 = new Timer(200, new ActionListener() {
             int num = 0;
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Enemy0Pattern5 enemy = new Enemy0Pattern5(GalagaGame.this, smallEnemy2Image, 0, 150);
+                Enemy0Pattern5 enemy = new Enemy0Pattern5(GalagaGame.this, explosionImages, smallEnemy2Image, 0, 150);
                 sprites.add(enemy);
 
                 num++;
@@ -442,12 +464,13 @@ public class GalagaGame extends JPanel implements KeyListener {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Enemy0Pattern6 enemy = new Enemy0Pattern6(GalagaGame.this, smallEnemy1Image, 800, 150);
+                Enemy0Pattern6 enemy = new Enemy0Pattern6(GalagaGame.this, explosionImages, smallEnemy1Image, 800, 150);
                 sprites.add(enemy);
 
                 pattern6.stop();
             }
         });
+        pattern6.start();
 
         midPattern1 = new Timer(400, new ActionListener() {
             @Override

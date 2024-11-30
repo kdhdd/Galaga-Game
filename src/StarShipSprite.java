@@ -6,13 +6,11 @@ import java.util.ArrayList;
 
 public class StarShipSprite extends Sprite{
     private GalagaGame game;
-    private Image image, playerInvincibleImage, fireball0, fireball1, fireball2, fireball3, fireball4, fireball5, fireball6, tmp;
-    private Timer timer, resetTimer, invincibilityTimer, imageTimer;
+    private Image image, playerInvincibleImage, fireball0, fireball1, fireball2, fireball3, fireball4, fireball5, fireball6;
+    private Timer timer, resetTimer, invincibilityTimer, imageTimer, removeEnemyTimer;
 
-    private boolean isInCollision = false;
     private boolean isInvincible = false; // 무적 상태 여부
     private boolean invincibleState = false;
-    private static final int INVINCIBLE_DURATION = 1000; // 무적 지속 시간 (ms)
 
     private int n = 0;
 
@@ -28,7 +26,6 @@ public class StarShipSprite extends Sprite{
         fireball4 = images.get(4);
         fireball5 = images.get(5);
         fireball6 = images.get(6);
-        tmp = image;
         dx = 0;
         dy = 0;
     }
@@ -61,22 +58,22 @@ public class StarShipSprite extends Sprite{
     // 충돌 모션
     @Override
     public void collisionMotion() {
-        if (isInCollision) {
+        if (getIsIncollision()) {
             return; // 이미 충돌 중이라면 실행하지 않음
         }
 
         imageTimer = new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (isInCollision) {
+                if (getIsIncollision()) {
                     invincibleState = !invincibleState;
                 }
             }
         });
         imageTimer.start();
 
-        isInCollision = true;
-        game.setStarshipIsCollision(true);
+        setIsIncollision(true);
+        game.setStarshipIsCollision(true); // 폭발 중 움직임 제한을 위함
 
         setDx(0);
         setDy(0);
@@ -88,59 +85,17 @@ public class StarShipSprite extends Sprite{
 
                 if (n == 1) {
                     startInvincibilityTimer();
-                } else if (n == 8) {
+                } else if (n == 7) {
                     startResetTimer(game);
                 } else if (n > 30) {
                     n = 0;
-                    isInCollision = false;
+                    setIsIncollision(false);
                     invincibleState = false;
                     timer.stop();
                 }
             }
         });
         timer.start();
-
-/*        timer = new Timer(100, new ActionListener() { // 100ms마다 실행
-            int num = 0;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switch (num) {
-                    case 0:
-                        image = fireball0;
-                        break;
-                    case 1:
-                        image = fireball1;
-                        break;
-                    case 2:
-                        image = fireball2;
-                        break;
-                    case 3:
-                        image = fireball3;
-                        break;
-                    case 4:
-                        image = fireball4;
-                        break;
-                    case 5:
-                        image = fireball5;
-                        break;
-                    case 6:
-                        image = fireball6;
-                        break;
-                    default:
-                        startResetTimer(game);
-                        startInvincibilityTimer(); // 무적 지속 타이머 시작
-                        image = tmp;
-                        setImage(image);
-                        isInCollision = false;
-                        timer.stop(); // 모든 이미지 변경이 끝나면 타이머 중지
-                        return;
-                }
-                setImage(image);
-                num++;
-            }
-        });
-        timer.start(); // 타이머 시작*/
     }
 
     @Override
@@ -171,7 +126,7 @@ public class StarShipSprite extends Sprite{
                 g.drawImage(fireball6, x, y, null);
                 break;
             default:
-                if (isInCollision && invincibleState) {
+                if (getIsIncollision() && invincibleState) {
                     g.drawImage(playerInvincibleImage, x, y, null);
                 } else {
                     g.drawImage(image, x, y, null);
@@ -181,7 +136,7 @@ public class StarShipSprite extends Sprite{
     }
 
     public void startResetTimer(GalagaGame game) {
-        if (!isInCollision) {
+        if (!getIsIncollision()) {
             return; // 충돌 상태가 아니라면 실행하지 않음
         }
 
@@ -206,7 +161,7 @@ public class StarShipSprite extends Sprite{
             public void actionPerformed(ActionEvent e) {
                 num++;
 
-                if (num > 31) {
+                if (num > 29) {
 
                     isInvincible = false; // 무적 상태 해제
                     invincibilityTimer.stop();
@@ -219,12 +174,26 @@ public class StarShipSprite extends Sprite{
 
     @Override
     public void handleCollision(Sprite other) {
-        if (!isInCollision && !isInvincible) {
+        if (!getIsIncollision() && !isInvincible) {
             collisionMotion();
             // 충돌한 객체가 만약 외계인 우주선이면 게임을 종료합니다.
             if (other instanceof Enemy0Pattern1and2 || other instanceof Enemy0Pattern3 ||
-                    other instanceof Enemy0Pattern4 || other instanceof Enemy0Pattern5) {
-                game.removeSprite(other);
+                    other instanceof Enemy0Pattern4 || other instanceof Enemy0Pattern5 || other instanceof Enemy0Pattern6) {
+                other.collisionMotion();
+                removeEnemyTimer = new Timer(100, new ActionListener() {
+                    int removeEnemyNum = 0;
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        removeEnemyNum++;
+
+                        if (removeEnemyNum == 7) {
+                            game.removeSprite(other);
+                            removeEnemyTimer.stop();
+                        }
+                    }
+                });
+                removeEnemyTimer.start();
                 game.loseLife();
             }
 
