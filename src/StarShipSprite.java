@@ -178,7 +178,9 @@ public class StarShipSprite extends Sprite{
             collisionMotion();
             // 충돌한 객체가 만약 외계인 우주선이면 게임을 종료합니다.
             if (other instanceof Enemy0Pattern1and2 || other instanceof Enemy0Pattern3 ||
-                    other instanceof Enemy0Pattern4 || other instanceof Enemy0Pattern5 || other instanceof Enemy0Pattern6) {
+                    other instanceof Enemy0Pattern4 || other instanceof Enemy0Pattern5 ||
+                    other instanceof Enemy0Pattern6 || other instanceof MidEnemyPattern0 ||
+                    other instanceof LargeEnemy) {
                 other.collisionMotion();
                 removeEnemyTimer = new Timer(100, new ActionListener() {
                     int removeEnemyNum = 0;
@@ -197,7 +199,12 @@ public class StarShipSprite extends Sprite{
                 game.loseLife();
             }
 
-            if (other instanceof BossSprite || other instanceof MidEnemyPattern0) {
+            if (other instanceof EnemyBullet) {
+                game.removeSprite(other);
+                game.loseLife();
+            }
+
+            if (other instanceof BossSprite) {
                 game.loseLife();
             }
         }
