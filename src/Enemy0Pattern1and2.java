@@ -24,17 +24,13 @@ public class Enemy0Pattern1and2 extends Sprite{
         explosion5 = new ImageIcon(images.get(5)).getImage();
         explosion6 = new ImageIcon(images.get(6)).getImage();
 
-        dy = 3;
+        dy = 4;
     }
 
     @Override
     public void move() {
         if (y > 700)
             game.removeSprite(this);
-
-        if (y >= 100 && dy > 0) {
-            dy = 2; // 속도를 줄임
-        }
 
         super.move();
     }

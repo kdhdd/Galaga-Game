@@ -28,7 +28,8 @@ public class ShotSprite extends Sprite{
     @Override
     public void handleCollision(Sprite other) {
         if (other instanceof Enemy0Pattern1and2 || other instanceof Enemy0Pattern3 ||
-                other instanceof Enemy0Pattern4 || other instanceof Enemy0Pattern5 || other instanceof Enemy0Pattern6) {
+                other instanceof Enemy0Pattern4 || other instanceof Enemy0Pattern5 ||
+                other instanceof Enemy0Pattern6 || other instanceof Enemy0Pattern7) {
             if (!other.getIsIncollision()) {
                 other.collisionMotion();
                 removeEnemyTimer = new Timer(100, new ActionListener() {
@@ -50,7 +51,7 @@ public class ShotSprite extends Sprite{
             }
         }
 
-        if (other instanceof BossSprite || other instanceof MidEnemyPattern0) {
+        if (other instanceof MidEnemyPattern0) {
             game.removeSprite(this);
         }
 

@@ -235,7 +235,7 @@ public class MidEnemyPattern0 extends Sprite {
                     });
                     removeEnemyTimer.start();
                 }
-
+                game.increaseMidScore();
             }
         }
     }
