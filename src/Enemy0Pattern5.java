@@ -15,7 +15,7 @@ public class Enemy0Pattern5 extends Sprite {
     private int collisionImageNum = 0;
 
     private double angle; // 각도 (라디안)
-    private double speed = 0.06; // 각도 변화 속도
+    private double speed = 0.08; // 각도 변화 속도
     private boolean isCircularMotion = false; // 원형 움직임 여부
     private int centerX; // 원 중심 X
     private int centerY; // 원 중심 Y
@@ -35,7 +35,7 @@ public class Enemy0Pattern5 extends Sprite {
         explosion5 = new ImageIcon(images.get(5)).getImage();
         explosion6 = new ImageIcon(images.get(6)).getImage();
 
-        dx = 4;
+        dx = 5;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class Enemy0Pattern5 extends Sprite {
                 isCircularMotion = false;
                 angle = 0;
                 dx = 0;
-                dy = -4;
+                dy = -5;
             }
         } else {
             super.move();
@@ -71,20 +71,6 @@ public class Enemy0Pattern5 extends Sprite {
     public void collisionMotion() {
         if (getIsIncollision()) return;
 
-/*        setCollisionTimer = new Timer(5, new ActionListener() {
-            int n = 0;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                n++;
-
-                if (n == 1) {
-                    setIsIncollision(true);
-                    setCollisionTimer.stop();
-                }
-            }
-        });
-        setCollisionTimer.start();*/
         setIsIncollision(true);
 
         setDx(0);

@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
-public class Enemy0Pattern6 extends Sprite {
+public class Enemy0Pattern7 extends Sprite {
     private GalagaGame game;
 
     private Image image, explosion0, explosion1, explosion2, explosion3, explosion4, explosion5, explosion6;
@@ -15,16 +15,19 @@ public class Enemy0Pattern6 extends Sprite {
     private int collisionImageNum = 0;
 
     private double angle; // 각도 (라디안)
-    private double speed = 0.02; // 각도 변화 속도
+    private double speed; // 각도 변화 속도
     private boolean isCircularMotion = false; // 원형 움직임 여부
     private int centerX; // 원 중심 X
     private int centerY; // 원 중심 Y
-    private int radius = 230; // 원 반지름
+    private int radius = 430; // 원 반지름
     private double rotationAngle; // 이미지 회전 각도
 
-    public Enemy0Pattern6(GalagaGame game, ArrayList<Image> images, Image image, int x, int y) {
+    public Enemy0Pattern7(GalagaGame game, ArrayList<Image> images, Image image, int x, int y, double speed) {
         super(image, x, y);
         this.game = game;
+        this.speed = speed;
+        this.angle = -Math.PI / 2;
+        this.rotationAngle = Math.toDegrees(angle);
         this.image = image;
         explosion0 = new ImageIcon(images.get(0)).getImage();
         explosion1 = new ImageIcon(images.get(1)).getImage();
@@ -33,33 +36,34 @@ public class Enemy0Pattern6 extends Sprite {
         explosion4 = new ImageIcon(images.get(4)).getImage();
         explosion5 = new ImageIcon(images.get(5)).getImage();
         explosion6 = new ImageIcon(images.get(6)).getImage();
-        this.angle = -Math.PI / 2;
-        this.rotationAngle = Math.toDegrees(angle) + 180;
 
-        dx = -4;
+        dx = (speed >= 0.015) ? 7 : 5;
     }
 
     @Override
     public void move() {
-        if (y < 0) game.removeSprite(this);
+        if (y > 700)
+            game.removeSprite(this);
 
-        if (x <= 400 && !isCircularMotion) {
-            isCircularMotion = true;
-            centerX = x;
-            centerY = y + radius;
+        if (!isCircularMotion) {
+            if (x >= 100 && x <= 110) {
+                isCircularMotion = true;
+                centerX = x;
+                centerY = y + radius;
+            }
         }
 
         if (isCircularMotion && !getIsIncollision()) {
             x = (int) (centerX + radius * Math.cos(angle));
             y = (int) (centerY + radius * Math.sin(angle));
-            angle -= speed;
+            angle += speed;
 
-            rotationAngle = Math.toDegrees(angle) + 180;
+            rotationAngle = Math.toDegrees(angle);
 
-            if (angle <= -Math.PI * 2) {
+            if (angle >= 0) {
                 isCircularMotion = false;
-                dy = -4;
                 dx = 0;
+                dy = 5;
             }
         } else {
             super.move();

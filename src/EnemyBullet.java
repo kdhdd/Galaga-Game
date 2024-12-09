@@ -18,6 +18,16 @@ public class EnemyBullet extends Sprite {
         moveToPlayer();
     }
 
+    public EnemyBullet(GalagaGame game, Image image, int x, int y, int direction) {
+        super(image, x, y);
+        this.game = game;
+
+        if (direction == 0)
+            moveToRight();
+        else if (direction == 1)
+            moveToLeft();
+    }
+
     public void moveToPlayer() {
         double deltaX = playerX - x;
         double deltaY = playerY - y;
@@ -29,6 +39,16 @@ public class EnemyBullet extends Sprite {
 
         dx = (int) (speed * unitVectorX);
         dy = (int) (speed * unitVectorY);
+    }
+
+    public void moveToRight() {
+        dx = 3;
+        dy = 3;
+    }
+
+    public void moveToLeft() {
+        dx = -3;
+        dy = 3;
     }
 
     @Override

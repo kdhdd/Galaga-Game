@@ -62,16 +62,6 @@ public class StarShipSprite extends Sprite{
             return; // 이미 충돌 중이라면 실행하지 않음
         }
 
-        imageTimer = new Timer(200, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (getIsIncollision()) {
-                    invincibleState = !invincibleState;
-                }
-            }
-        });
-        imageTimer.start();
-
         setIsIncollision(true);
         game.setStarshipIsCollision(true); // 폭발 중 움직임 제한을 위함
 
@@ -154,6 +144,14 @@ public class StarShipSprite extends Sprite{
     private void startInvincibilityTimer() {
         isInvincible = true;
 
+        imageTimer = new Timer(200, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                invincibleState = !invincibleState;
+            }
+        });
+        imageTimer.start();
+
         invincibilityTimer = new Timer(100, new ActionListener() {
             int num = 0;
 
@@ -174,13 +172,13 @@ public class StarShipSprite extends Sprite{
 
     @Override
     public void handleCollision(Sprite other) {
-        if (!getIsIncollision() && !isInvincible) {
+        if (!getIsIncollision() && !isInvincible && !other.getIsIncollision()) {
             collisionMotion();
             // 충돌한 객체가 만약 외계인 우주선이면 게임을 종료합니다.
             if (other instanceof Enemy0Pattern1and2 || other instanceof Enemy0Pattern3 ||
                     other instanceof Enemy0Pattern4 || other instanceof Enemy0Pattern5 ||
-                    other instanceof Enemy0Pattern6 || other instanceof MidEnemyPattern0 ||
-                    other instanceof LargeEnemy) {
+                    other instanceof Enemy0Pattern6 || other instanceof Enemy0Pattern7 ||
+                    other instanceof MidEnemyPattern0 || other instanceof LargeEnemy) {
                 other.collisionMotion();
                 removeEnemyTimer = new Timer(100, new ActionListener() {
                     int removeEnemyNum = 0;
@@ -201,10 +199,6 @@ public class StarShipSprite extends Sprite{
 
             if (other instanceof EnemyBullet) {
                 game.removeSprite(other);
-                game.loseLife();
-            }
-
-            if (other instanceof BossSprite) {
                 game.loseLife();
             }
         }
