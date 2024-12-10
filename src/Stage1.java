@@ -1,9 +1,8 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Chapter1 {
+public class Stage1 {
     private GalagaGame game;
 
     private Timer restartTimer;     // 패턴 재사용을 위한 타이머
@@ -14,7 +13,7 @@ public class Chapter1 {
             smallEnemyBulletTimer5, smallEnemyBulletTimer6, smallEnemyBulletTimer7, smallEnemyBulletTimer8;
     private Timer midEnemyBulletTimer1;
 
-    public Chapter1(GalagaGame game) {
+    public Stage1(GalagaGame game) {
         this.game = game;
 
         pattern1 = new Timer(300, new ActionListener() {
@@ -22,7 +21,7 @@ public class Chapter1 {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Enemy0Pattern1and2 enemy = new Enemy0Pattern1and2(game, game.getSmallEnemyExplosionImages(), game.getsmallEnemy0Image(), 50 + (num * 50), 10);
+                Enemy0Pattern1and2 enemy = new Enemy0Pattern1and2(game, game.getSmallEnemyExplosionImages(), game.getsmallEnemy0Image(), 50 + (num * 50), 0);
                 enemy.pattern1();
                 game.addSprite(enemy);
 
@@ -44,14 +43,14 @@ public class Chapter1 {
                 num++;
 
                 if (num == 2) {
-                    Enemy0Pattern1and2 enemy2 = new Enemy0Pattern1and2(game, game.getSmallEnemyExplosionImages(), game.getsmallEnemy0Image(), 750, 10);
+                    Enemy0Pattern1and2 enemy2 = new Enemy0Pattern1and2(game, game.getSmallEnemyExplosionImages(), game.getsmallEnemy0Image(), 750, 0);
                     enemy2.pattern2();
                     game.addSprite(enemy2);
 
                     smallEnemyBulletTimer2 = new Timer(1000, new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if (game.containsEnemy(enemy2)) {
+                            if (game.containsEnemy(enemy2) && !enemy2.getIsIncollision()) {
 
                                 EnemyBullet eb = new EnemyBullet(game, game.getenemyBullet(), enemy2.getX() + enemy2.getWidth() / 2, enemy2.getY() + enemy2.getHeight() / 2,
                                         game.getStartShipX(), game.getStarShipY());
@@ -62,7 +61,7 @@ public class Chapter1 {
                     });
                     smallEnemyBulletTimer2.start();
                 } else {
-                    Enemy0Pattern1and2 enemy = new Enemy0Pattern1and2(game, game.getSmallEnemyExplosionImages(), game.getsmallEnemy0Image(), 750 - (50 * num), 10);
+                    Enemy0Pattern1and2 enemy = new Enemy0Pattern1and2(game, game.getSmallEnemyExplosionImages(), game.getsmallEnemy0Image(), 750 - (50 * num), 0);
                     enemy.pattern2();
                     game.addSprite(enemy);
                 }
@@ -77,7 +76,7 @@ public class Chapter1 {
         pattern3 = new Timer(400, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Enemy0Pattern3 enemy = new Enemy0Pattern3(game, game.getSmallEnemyExplosionImages(), game.getsmallEnemy1Image(), 200, 10);
+                Enemy0Pattern3 enemy = new Enemy0Pattern3(game, game.getSmallEnemyExplosionImages(), game.getsmallEnemy1Image(), 200, 0);
                 game.addSprite(enemy);
 
                 pattern3.stop();
@@ -88,7 +87,7 @@ public class Chapter1 {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Enemy0Pattern4 enemy = new Enemy0Pattern4(game, game.getSmallEnemyExplosionImages(), game.getsmallEnemy1Image(), 530, 10);
+                Enemy0Pattern4 enemy = new Enemy0Pattern4(game, game.getSmallEnemyExplosionImages(), game.getsmallEnemy1Image(), 530, 0);
                 game.addSprite(enemy);
 
                 smallEnemyBulletTimer4 = new Timer(1000, new ActionListener() {
@@ -96,7 +95,7 @@ public class Chapter1 {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (game.containsEnemy(enemy)) {
+                        if (game.containsEnemy(enemy) && !enemy.getIsIncollision()) {
                             EnemyBullet eb = new EnemyBullet(game, game.getenemyBullet(), enemy.getX() + enemy.getWidth() / 2, enemy.getY() + enemy.getHeight() / 2,
                                     game.getStartShipX(), game.getStarShipY());
                             game.addSprite(eb);
@@ -156,7 +155,7 @@ public class Chapter1 {
                     smallEnemyBulletTimer7 = new Timer(1000, new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if (game.containsEnemy(enemy2)) {
+                            if (game.containsEnemy(enemy2) && !enemy2.getIsIncollision()) {
                                 EnemyBullet eb = new EnemyBullet(game, game.getenemyBullet(), enemy2.getX() + enemy2.getWidth() / 2, enemy2.getY() + enemy2.getHeight() / 2,
                                         game.getStartShipX(), game.getStarShipY());
                                 game.addSprite(eb);
@@ -191,7 +190,7 @@ public class Chapter1 {
                     smallEnemyBulletTimer8 = new Timer(1000, new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if (game.containsEnemy(enemy2)) {
+                            if (game.containsEnemy(enemy2) && !enemy2.getIsIncollision()) {
                                 EnemyBullet eb = new EnemyBullet(game, game.getenemyBullet(), enemy2.getX() + enemy2.getWidth() / 2, enemy2.getY() + enemy2.getHeight() / 2,
                                         game.getStartShipX(), game.getStarShipY());
                                 game.addSprite(eb);
@@ -215,13 +214,13 @@ public class Chapter1 {
         midPattern1 = new Timer(400, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MidEnemyPattern0 enemy = new MidEnemyPattern0(game, game.getmidEnemyExplosionImages(), game.getmidEnemy0Image(), game.getmidEnemy0WarningImage(), 200, 10);
+                MidEnemyPattern0 enemy = new MidEnemyPattern0(game, game.getmidEnemyExplosionImages(), game.getmidEnemy0Image(), game.getmidEnemy0WarningImage(), 200, 0);
                 game.addSprite(enemy);
 
                 midEnemyBulletTimer1 = new Timer(3000, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (game.containsEnemy(enemy)) {
+                        if (game.containsEnemy(enemy) && !enemy.getIsIncollision()) {
 
                             EnemyBullet eb1 = new EnemyBullet(game, game.getenemyBullet(), enemy.getX() + enemy.getWidth() / 2, enemy.getY() + enemy.getHeight() / 2,
                                     game.getStartShipX(), game.getStarShipY());
@@ -252,14 +251,14 @@ public class Chapter1 {
                 num++;
 
                 if (num == 2) {
-                    Enemy0Pattern1and2 enemy2 = new Enemy0Pattern1and2(game, game.getSmallEnemyExplosionImages(), game.getsmallEnemy0Image(), 50 + (num * 50), 10);
+                    Enemy0Pattern1and2 enemy2 = new Enemy0Pattern1and2(game, game.getSmallEnemyExplosionImages(), game.getsmallEnemy0Image(), 50 + (num * 50), 0);
                     enemy2.pattern1();
                     game.addSprite(enemy2);
 
                     smallEnemyBulletTimer1 = new Timer(1000, new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if (game.containsEnemy(enemy2)) {
+                            if (game.containsEnemy(enemy2) && !enemy2.getIsIncollision()) {
 
                                 EnemyBullet eb = new EnemyBullet(game, game.getenemyBullet(), enemy2.getX() + enemy2.getWidth() / 2, enemy2.getY() + enemy2.getHeight() / 2, 0);
                                 game.addSprite(eb);
@@ -269,7 +268,7 @@ public class Chapter1 {
                     });
                     smallEnemyBulletTimer1.start();
                 } else {
-                    Enemy0Pattern1and2 enemy = new Enemy0Pattern1and2(game, game.getSmallEnemyExplosionImages(), game.getsmallEnemy0Image(), 50 + (num * 50), 10);
+                    Enemy0Pattern1and2 enemy = new Enemy0Pattern1and2(game, game.getSmallEnemyExplosionImages(), game.getsmallEnemy0Image(), 50 + (num * 50), 0);
                     enemy.pattern1();
                     game.addSprite(enemy);
                 }

@@ -51,7 +51,7 @@ public class ShotSprite extends Sprite{
             }
         }
 
-        if (other instanceof MidEnemyPattern0) {
+        if (other instanceof MidEnemyPattern0 || other instanceof LargeEnemy) {
             game.removeSprite(this);
         }
 
