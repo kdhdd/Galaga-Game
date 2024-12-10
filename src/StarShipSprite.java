@@ -38,8 +38,8 @@ public class StarShipSprite extends Sprite{
             return;
         }
         // dx가 양수일 때는 오른쪽으로 이동
-        // 800px 이상으로 가면 더 이상 오른쪽으로 이동하지 않도록 합니다.
-        if ((dx > 0) && ( x > 800)) {
+        // 730px 이상으로 가면 더 이상 오른쪽으로 이동하지 않도록 합니다.
+        if ((dx > 0) && ( x > 730)) {
             return;
         }
         // dy가 양수일 때는 아래쪽으로 이동

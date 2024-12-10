@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MidEnemyPattern0 extends Sprite {
@@ -28,7 +27,7 @@ public class MidEnemyPattern0 extends Sprite {
     public MidEnemyPattern0(GalagaGame game, ArrayList<Image> images, Image image, Image image2, int x, int y) {
         super(image, x, y);
         this.game = game;
-        this.health = 40;
+        this.health = 150;
         this.image = image;
         warningImage = image2;
         explosion0 = new ImageIcon(images.get(0)).getImage();

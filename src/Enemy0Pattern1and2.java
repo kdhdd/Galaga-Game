@@ -43,6 +43,14 @@ public class Enemy0Pattern1and2 extends Sprite{
         dx = -2;
     }
 
+    public void pattern3() {
+        dx = -1;
+    }
+
+    public void pattern4() {
+        dx = 1;
+    }
+
     @Override
     public void collisionMotion() {
         if (getIsIncollision()) return;

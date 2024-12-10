@@ -22,10 +22,20 @@ public class EnemyBullet extends Sprite {
         super(image, x, y);
         this.game = game;
 
-        if (direction == 0)
-            moveToRight();
-        else if (direction == 1)
-            moveToLeft();
+        switch (direction) {
+            case 0:
+                moveToDiagonalRight();
+                break;
+            case 1:
+                moveToDiagonalLeft();
+                break;
+            case 2:
+                moveToRight();
+                break;
+            case 3:
+                moveToLeft();
+                break;
+        }
     }
 
     public void moveToPlayer() {
@@ -41,14 +51,24 @@ public class EnemyBullet extends Sprite {
         dy = (int) (speed * unitVectorY);
     }
 
-    public void moveToRight() {
+    public void moveToDiagonalRight() {
         dx = 3;
         dy = 3;
     }
 
-    public void moveToLeft() {
+    public void moveToDiagonalLeft() {
         dx = -3;
         dy = 3;
+    }
+
+    public void moveToRight() {
+        dx = 3;
+        dy = 1;
+    }
+
+    public void moveToLeft() {
+        dx = -3;
+        dy = 1;
     }
 
     @Override
