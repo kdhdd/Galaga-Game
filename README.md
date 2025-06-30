@@ -1,16 +1,16 @@
-갤러그 게임입니다.
+## 서경대학교 자바어플리케이션 기말고사
+✴ 2024 갤러그게임 레포지토리 ✴
+<br><br>
 
+## 🛠 기술 스택
 ![js](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 ![js](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 
-1차 개발
-1. Alien 랜덤 움직임 구현
 
-2차 개발
-1. Player 좌우 움직임 제한 → 자유로운 움직임 구현
-2. Level 추가
-3. Player 조건부 위치 초기화 또는 유지
 
-3차 개발 
-1. 프레임 위치 설정
-2. 보스 생성
+<br>
+
+## 🚀 서비스 구현 결과
+<img src="https://github.com/user-attachments/assets/736d0322-0583-4381-9590-dd53e11b1689" alt="game" width="500" />
+
+<br>
